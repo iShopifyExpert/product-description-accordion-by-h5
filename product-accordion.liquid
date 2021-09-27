@@ -1,0 +1,69 @@
+<div class="product-description">
+  {% assign descriptionparts = product.description | split: '<h5>' %}
+  <ul class="accordion">    
+    {% for description in descriptionparts %}{% assign numbers = forloop.index0 %}{% if description contains '</h5>' %}{% assign partsheading = description | split: '</h5>'  %}{% assign partscontent = description | split: '</h5>' %}{% else %}{% assign partsheading = 'Beskrivelse' %}{% assign partscontent = product.description | split: '<h5>' %}{% endif %}
+    <li class="accordion-item{% if numbers == 1 %} is-active{% endif %}">
+      <h3 class="accordion-thumb">{% if description contains '</h5>' %}{{partsheading[0] | capitalize }}{% else %}{{partsheading}}{% endif %} <span class="accordion-thumb-icon"></span></h3>
+      <div class="accordion-panel">{% if description contains '</h5>' %}{{ partscontent[1] }}{% else %}{{ partscontent[0] }}{% endif %}</div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>
+<style>
+.product-description .accordion {
+	 margin: 1rem 0;
+	 padding: 0;
+	 list-style: none;
+	 border-top: 1px solid #e5e5e5;
+}
+.product-description .accordion-item {
+	 border-bottom: 1px solid #e5e5e5;
+}
+/* Thumb */
+.product-description .accordion-thumb {
+	 margin: 0;
+	 padding: 1.5rem 0;
+	 cursor: pointer;
+	 font-weight: normal;
+     font-size: 18px;
+}
+.product-description .accordion-thumb .accordion-thumb-icon {
+    float: right;
+}
+.product-description .accordion-thumb .accordion-thumb-icon::after {
+	 content: '';
+	 display: inline-block;
+	 height: 10px;
+	 width: 10px;
+	 margin-right: 1rem;
+	 margin-left: 0.5rem;
+	 vertical-align: middle;
+	 border-right: 1px solid;
+	 border-bottom: 1px solid;
+	 transform: rotate(-45deg);
+	 transition: transform 0.2s ease-out;
+}
+/* Panel */
+.product-description .accordion-panel {
+	 margin: 0;
+	 padding: 0.8rem 0;
+	 display: none;
+}
+/* Active */
+.product-description .accordion-item.is-active .accordion-thumb .accordion-thumb-icon::after {
+	 transform: rotate(45deg);
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    // (Optional) Active an item if it has the class "is-active"	
+    $(".accordion > .accordion-item.is-active").children(".accordion-panel").slideDown();
+    $(".accordion > .accordion-item").click(function() {
+      // Cancel the siblings
+      $(this).siblings(".accordion-item").removeClass("is-active").children(".accordion-panel").slideUp();
+      // Toggle the item
+      $(this).toggleClass("is-active").children(".accordion-panel").slideToggle("ease-out");
+    });
+  });
+</script>
